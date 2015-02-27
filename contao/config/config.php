@@ -15,3 +15,4 @@
 
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('ContaoBlackforest\Backend\DCA\Module\Device', 'addChildRecordCallback');
 $GLOBALS['TL_HOOKS']['parseWidget'][]       = array('ContaoBlackforest\Backend\DCA\Module\Device', 'addVisibleDeviceToWizard');
+$GLOBALS['TL_HOOKS']['isVisibleElement'][]  = array('ContaoBlackforest\Frontend\Module\Device', 'visibleDevice');
