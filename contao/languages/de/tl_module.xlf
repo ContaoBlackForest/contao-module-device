@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<xliff version="1.1">
+	<file datatype="php" original="system/modules/module-device/languages/en/tl_module.php" source-language="en">
+		<body>
+			<trans-unit id="tl_module.deviceSelect.0">
+				<source>Device selection</source>
+                <target>Geräteauswahl</target>
+			</trans-unit>
+			<trans-unit id="tl_module.deviceSelect.1">
+				<source>Make the selection for which device this module should be displayed.</source>
+                <target>Treffen Sie die Auswahl für welches Gerät dieses Modul angezeigt werden soll.</target>
+			</trans-unit>
+			<trans-unit id="tl_module.device_legend">
+				<source>Device settings</source>
+                <target>Geräte-Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="tl_module.desktop">
+				<source>Desktop</source>
+                <target>Bildschirm</target>
+			</trans-unit>
+			<trans-unit id="tl_module.mobile">
+				<source>Mobile</source>
+                <target>Mobil</target>
+			</trans-unit>
+			<trans-unit id="tl_module.phone">
+				<source>Smartphone</source>
+                <target>Smartphone</target>
+			</trans-unit>
+			<trans-unit id="tl_module.tablet">
+				<source>Tablet</source>
+                <target>Tablet</target>
+			</trans-unit>
+			<trans-unit id="tl_module.deviceVisibility">
+				<source>Visible for</source>
+                <target>Sichtbar für</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
