@@ -52,10 +52,22 @@ class Device extends \Controller
 
 	protected function moduleVisible($element)
 	{
-		$method = 'is' . str_replace($element->deviceSelect[0], strtoupper($element->deviceSelect[0]), $element->deviceSelect);
+		if ($element->deviceSelect) {
+			$element->deviceSelect = unserialize($element->deviceSelect);
 
-		if (method_exists($this, $method)) {
-			return $this->$method();
+			if ($element->deviceSelect) {
+				$return = false;
+
+				foreach ($element->deviceSelect as $device) {
+					$method = 'is' . str_replace($device[0], strtoupper($device[0]), $device);
+
+					if (method_exists($this, $method)) {
+						$this->$method($element) && $return === false ? $return = true : '';
+					}
+				}
+
+				return $return;
+			}
 		}
 
 		return true;
@@ -67,11 +79,26 @@ class Device extends \Controller
 		if ($element->type === 'module') {
 			$module = \ModuleModel::findByPk($element->module);
 
-			if ($module && $module->deviceSelect && $module->deviceSelect != $GLOBALS['TL_DCA'][$module->getTable()]['fields']['deviceSelect']['default']) {
-				$method = 'is' . str_replace($module->deviceSelect[0], strtoupper($module->deviceSelect[0]), $module->deviceSelect);
+			if ($module && $module->deviceSelect) {
 
-				if (method_exists($this, $method)) {
-					return $this->$method();
+				if ($module->deviceSelect) {
+					if (!is_array($module->deviceSelect)) {
+						$module->deviceSelect = unserialize($module->deviceSelect);
+					}
+
+					if ($module->deviceSelect) {
+						$return = false;
+
+						foreach ($module->deviceSelect as $device) {
+							$method = 'is' . str_replace($device[0], strtoupper($device[0]), $device);
+
+							if (method_exists($this, $method)) {
+								$this->$method($element) && $return === false ? $return = true : '';
+							}
+						}
+
+						return $return;
+					}
 				}
 			}
 		}

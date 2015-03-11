@@ -52,11 +52,21 @@ class Device extends \Backend
 							$row
 						);
 
-		if ($row['deviceSelect'] && $row['deviceSelect'] != $GLOBALS['TL_DCA'][$strName]['fields']['deviceSelect']['default']) {
-			$return   = explode('</span>', $return);
-			$return[] = ' <span style="color:#b3b3b3;">[' . $GLOBALS['TL_LANG'][$strName][$row['deviceSelect']] . ']';
-			$return   = implode('</span>', $return);
+		if ($row['deviceSelect']) {
+			$devices = unserialize($row['deviceSelect']);
+
+			if (count($devices) > 0) {
+				$string = '';
+				foreach ($devices as $device) {
+					$string .= ' <span style="color:#b3b3b3;">[' . $GLOBALS['TL_LANG'][$strName][$device] . ']';
+				}
+
+				$return   = explode('</span>', $return);
+				$return[] = $string;
+				$return   = implode('</span>', $return);
+			}
 		}
+
 
 		array_insert($callback, 0, array($reflectionClass->name, __FUNCTION__));
 
@@ -91,19 +101,23 @@ class Device extends \Backend
 							$row
 						);
 
-		if ($row['module'] && $row['type'] === 'module') {
+		if ($row['type'] === 'module') {
 			$module = \ModuleModel::findByPk($row['module']);
 
 			if ($module) {
-				if ($module->deviceSelect && $module->deviceSelect != $GLOBALS['TL_DCA']['tl_module']['fields']['deviceSelect']['default']) {
-					$return    = explode('</div>', $return);
-					$return[0] = str_replace(
-						$GLOBALS['TL_LANG']['CTE'][$row['type']][0],
-						$GLOBALS['TL_LANG']['CTE'][$row['type']][0] . ' ('
-						. $GLOBALS['TL_LANG'][$strName]['deviceVisibility'] . ' ' . $GLOBALS['TL_LANG'][$strName][$module->deviceSelect] . ')',
-						$return[0]
-					);
-					$return    = implode('</div>', $return);
+				if ($module->deviceSelect) {
+					$devices = unserialize($module->deviceSelect);
+
+					if ($devices) {
+						$string = '';
+						foreach ($devices as $device) {
+							$string .= ' (' . $GLOBALS['TL_LANG'][$strName]['deviceVisibility'] . ' ' . $GLOBALS['TL_LANG'][$strName][$device] . ')';
+						}
+
+						$return    = explode('</div>', $return);
+						$return[0] = str_replace($GLOBALS['TL_LANG']['CTE'][$row['type']][0], $GLOBALS['TL_LANG']['CTE'][$row['type']][0] . $string, $return[0]);
+						$return    = implode('</div>', $return);
+					}
 				}
 			}
 		}
@@ -156,7 +170,7 @@ class Device extends \Backend
 		foreach ($wizard->value as $value) {
 			$module = \ModuleModel::findByPk($value['mod']);
 
-			if ($module && $module->deviceSelect && $module->deviceSelect != $GLOBALS['TL_DCA']['tl_module']['fields']['deviceSelect']['default']) {
+			if ($module && $module->deviceSelect) {
 				$this->loadLanguageFile('tl_module');
 
 				$option = 'value="' . $module->id . '"';
@@ -169,7 +183,15 @@ class Device extends \Backend
 					if ($i > 0) {
 						$row = explode($endTag, $row);
 
-						$row[0] .= ' || ' . $GLOBALS['TL_LANG'][$module->getTable()][$module->deviceSelect];
+						if ($module->deviceSelect) {
+							$devices = unserialize($module->deviceSelect);
+
+							if ($devices) {
+								foreach ($devices as $device) {
+									$row[0] .= ' || ' . $GLOBALS['TL_LANG'][$module->getTable()][$device];
+								}
+							}
+						}
 
 						$row = implode($endTag, $row);
 					}
@@ -189,7 +211,7 @@ class Device extends \Backend
 
 		if ($modules) {
 			while ($modules->next()) {
-				if ($modules->deviceSelect && $modules->deviceSelect != $GLOBALS['TL_DCA']['tl_module']['fields']['deviceSelect']['default']) {
+				if ($modules->deviceSelect && $modules->deviceSelect) {
 					$this->loadLanguageFile('tl_module');
 
 					$option = 'value="' . $modules->id . '"';
@@ -202,7 +224,16 @@ class Device extends \Backend
 						if ($i > 0) {
 							$row = explode($endTag, $row);
 
-							$row[0] .= ' || ' . $GLOBALS['TL_LANG'][$modules->current()->getTable()][$modules->deviceSelect];
+							if ($modules->deviceSelect) {
+								$devices = unserialize($modules->deviceSelect);
+
+								if ($devices) {
+									foreach ($devices as $device) {
+										$row[0] .= ' || ' . $GLOBALS['TL_LANG'][$modules->current()
+																						->getTable()][$device];
+									}
+								}
+							}
 
 							$row = implode($endTag, $row);
 						}
