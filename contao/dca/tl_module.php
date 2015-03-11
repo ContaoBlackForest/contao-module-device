@@ -30,12 +30,12 @@ $fields = array
 	'deviceSelect' => array
 	(
 		'label'     => &$GLOBALS['TL_LANG']['tl_module']['deviceSelect'],
-		'default'   => '--',
 		'exclude'   => true,
-		'inputType' => 'select',
-		'options'   => array('--', 'desktop', 'mobile', 'phone', 'tablet'),
+		'inputType' => 'checkboxWizard',
+		'options'   => array('desktop', 'mobile', 'phone', 'tablet'),
 		'reference' => &$GLOBALS['TL_LANG']['tl_module'],
-		'sql'       => "varchar(32) NOT NULL default ''"
+		'eval'      => array('multiple' => true),
+		'sql'       => "varchar(255) NOT NULL default ''"
 	)
 );
 
